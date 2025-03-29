@@ -79,10 +79,10 @@ def get_opt_depth(node: Node) -> int:
     length = len(node.sequence)
 
     if length > 22:
-        return 7
+        return 6
     elif length > 16:
-        return 8
+        return 7
     elif length > 12:
-        return 9
+        return 8
     else:
-        return 10
+        return 9
