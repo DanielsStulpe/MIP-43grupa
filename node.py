@@ -37,7 +37,30 @@ def is_terminal(node: Node) -> bool:
 
 def get_heuristic_value(node: Node) -> int:
     """ Izdod heiristiskas funkcijas novērtējumu  """
-    return  node.first_player_points - node.second_player_points
+    sequence = node.sequence[:]
+    first_player_points = node.first_player_points
+    second_player_points = node.second_player_points
+    player = get_player(node)    # 1 = pirmais, 2 = otrais
+
+    move_cost = {  
+        1: -1,   # dod 1 punktu pretiniekam = noņem 1 punktu sev
+        2: -4,   # noņem 4 punktus sev
+        3: -3,   # dod 3 punktus pretiniekam = noņem 3 punktus sev
+        4: -8    # noņem 8 punktus sev
+    }
+
+    while sequence:      # Katrā solī atbilstošais spēlētājs izvēlas mazāko iespējamo zaudējumu
+        best_move = min(sequence, key=lambda x: move_cost[x])
+        sequence.remove(best_move)
+
+        if player == 1:     # Pirmais spēlētājs
+            first_player_points += move_cost[best_move]
+            player += 1
+        else:               # Otrais spēlētājs
+            second_player_points += move_cost[best_move]
+            player -= 1
+
+    return first_player_points - second_player_points
     
 
 def get_winner(node: Node) -> int:
