@@ -138,10 +138,10 @@ class GameApp:
             end_time = time.time()
             elapsed_time = end_time - start_time
             print(f"MI gājiena laiks: {elapsed_time:.4f} sekundes")
-            
+
             if 0 <= ai_index < len(self.buttons):
                 self.buttons[ai_index].config(bg="red")  # Simulē pogas nospiešanu
-                self.root.after(1000, lambda: self.finish_ai_move(ai_index))
+                self.root.after(3000, lambda: self.finish_ai_move(ai_index))
 
     
     def finish_ai_move(self, ai_index):
@@ -168,11 +168,15 @@ class GameApp:
         else:
             if self.first_player == "player":
                 msg = f"{'Spēlētājs' if winner == 1 else 'Dators'} uzvarēja!"
+                points = f"Spēlētāja punkti: {self.node.first_player_points} \nDatora punkti: {self.node.second_player_points}"
             else:
                 msg = f"{'Dators' if winner == 1 else 'Spēlētājs'} uzvarēja!"
+                points = f"Spēlētāja punkti: {self.node.second_player_points} \nDatora punkti: {self.node.first_player_points}"
         
-        label = tk.Label(container, text=msg, font=("Arial", 24))
+        label = tk.Label(container, text=msg, font=("Arial", 26))
         label.pack(pady=(150, 0))
+        label2 = tk.Label(container, text=points, font=("Arial", 20))
+        label2.pack(pady=(50, 0))
 
         button_frame = tk.Frame(container)
         button_frame.pack(expand=True)
