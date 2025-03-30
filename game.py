@@ -141,7 +141,7 @@ class GameApp:
 
             if 0 <= ai_index < len(self.buttons):
                 self.buttons[ai_index].config(bg="red")  # Simulē pogas nospiešanu
-                self.root.after(3000, lambda: self.finish_ai_move(ai_index))
+                self.root.after(1000, lambda: self.finish_ai_move(ai_index))
 
     
     def finish_ai_move(self, ai_index):
