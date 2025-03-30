@@ -1,6 +1,7 @@
 import tkinter as tk
+import time
 from node import Node, player_make_move, ai_make_move, get_winner
-from algorithms import min_max, alpha_beta
+from algorithms import min_max, alpha_beta, visited_nodes_count
 
 class GameApp:
     def __init__(self, root):
@@ -122,13 +123,22 @@ class GameApp:
     
     
     def ai_turn(self):
+        global visited_nodes_count
+        visited_nodes_count = 0
+         
         if self.current_player == 2 and self.node.sequence:
+            start_time = time.time()
+
             if self.algorithm == 'min-max':
                 move = min_max(self.node)
             else:
                 move = alpha_beta(self.node)
             self.node, ai_index = ai_make_move(self.node, move)
-
+            
+            end_time = time.time()
+            elapsed_time = end_time - start_time
+            print(f"MI gājiena laiks: {elapsed_time:.4f} sekundes")
+            
             if 0 <= ai_index < len(self.buttons):
                 self.buttons[ai_index].config(bg="red")  # Simulē pogas nospiešanu
                 self.root.after(1000, lambda: self.finish_ai_move(ai_index))
