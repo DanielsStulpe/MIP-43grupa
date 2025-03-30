@@ -1,9 +1,13 @@
 import math
-from Node import Node, possible_moves, get_player, get_heuristic_value, is_terminal, ai_make_move
+from node import Node, possible_moves, get_player, get_heuristic_value, is_terminal, ai_make_move
 
 
-def min_max(node: Node,  depth: int = 0, max_depth: int = None) -> int:
+def min_max(node: Node,  depth: int = 0, max_depth: int = None, counter: int = None) -> int:
     """ Nosaka optimālo gājienu spēlētājam izmantojot Mini-Maks algoritmu"""
+    if counter is None:
+        counter = 0
+    counter += 1
+
     if max_depth is None:
         max_depth = get_opt_depth(node)  
 
@@ -17,10 +21,12 @@ def min_max(node: Node,  depth: int = 0, max_depth: int = None) -> int:
         min_eval = math.inf
         for move in possible_moves(node):
             new_node, _ = ai_make_move(node, move)
-            eval = min_max(new_node, depth=depth+1, max_depth=max_depth)
+            eval = min_max(new_node, depth=depth+1, max_depth=max_depth, counter=counter)
             if eval < min_eval:
                 min_eval = eval
                 best_move = move
+        if depth == 0:
+            print(f"[Min-Max] Apmeklētas virsotnes: {counter}")
         return best_move if depth == 0 else min_eval  
 
     else:       # Maksimizācijas spelētājs
@@ -31,12 +37,18 @@ def min_max(node: Node,  depth: int = 0, max_depth: int = None) -> int:
             if eval > max_eval:
                 max_eval = eval
                 best_move = move
+        if depth == 0:
+            print(f"[Min-Max] Apmeklētas virsotnes: {counter}")
         return best_move if depth == 0 else max_eval  
 
 
 
-def alpha_beta(node: Node, depth: int = 0, max_depth: int = None, alpha: float = -math.inf, beta: float = math.inf) -> int:
+def alpha_beta(node: Node, depth: int = 0, max_depth: int = None, alpha: float = -math.inf, beta: float = math.inf, counter: int = None) -> int:
     """ Nosaka optimālo gājienu spēlētājam izmantojot Alfa-Beta algoritmu"""
+    if counter is None:
+        counter = 0
+    counter += 1
+
     if max_depth is None:
         max_depth = get_opt_depth(node)  
 
@@ -57,6 +69,8 @@ def alpha_beta(node: Node, depth: int = 0, max_depth: int = None, alpha: float =
             beta  = min(beta , eval)
             if beta <= alpha:
                 break           # Alpha cut-off
+        if depth == 0:
+            print(f"[Alpha-Beta] Apmeklētas virsotnes: {counter}")
         return best_move if depth == 0 else min_eval  
 
     else:           # Maksimizācijas spelētājs
@@ -70,6 +84,8 @@ def alpha_beta(node: Node, depth: int = 0, max_depth: int = None, alpha: float =
             alpha = max(alpha, eval)
             if beta <= alpha:
                 break           # Beta cut-off
+        if depth == 0:
+            print(f"[Alpha-Beta] Apmeklētas virsotnes: {counter}")
         return best_move if depth == 0 else max_eval  
     
 
